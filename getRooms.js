@@ -1,4 +1,4 @@
-const url = "https://localhost:8080/rooms";
+const url = "http://localhost:8080/rooms";
 
 async function getAllRooms() {
   try {
