@@ -8,7 +8,7 @@ async function getAllRooms() {
       throw new Error(`Erro na requisição: ${response.status}`);
     }
 
-    const data = await response.json(); // Converte a resposta para JSON
+    const data = await response.json(); 
 
     console.log("Dados da API:", data);
   } catch (error) {
