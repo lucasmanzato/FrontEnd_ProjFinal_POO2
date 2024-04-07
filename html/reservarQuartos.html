@@ -4,26 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Cliente e Quarto</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
-    <script src="getRooms.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/js/submitFormRooms.js" defer></script>
 </head>
 <body>
     <header>
-        <img src="img/logoSemFundo.png" alt="Descrição da imagem" class="homePhoto">
+        <img src="/img/logoSemFundo.png" alt="Descrição da imagem" class="homePhoto">
             
             <nav>
                 <ul>
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="#">Quartos</a></li>
-                    <li><a href="#">Clientes</a></li>
-                    <li><a href="#">Reservas</a></li>
+                    <li><a href="/index.html">Home</a></li>
+                    <li><a href="regQuarto.html">Quartos</a></li>
+                    <li><a href="CadCliente.html">Clientes</a></li>
+                    <li><a href="reservas.html">Reservas</a></li>
                 </ul>
             </nav>
         </header>
 
         <main>
-            <form>
+            <form id = 'registerRoom'>
                 <label for="numQuarto">Número do Quarto</label>
                 <input type="text" id="numQuarto" name="numQuarto"><br><br>
                 
@@ -36,7 +35,7 @@
                 <label for="dataSaida">Data de saída:</label>
                 <input type="date" id="dataSaida" name="dataSaida"><br><br>
                 
-                <input type="button" value="Submit" class="inputButton">
+                <input type="submit" class="inputButton">
                 <input type="button" value="Remover" class="inputButton">
             </form>
         </main>

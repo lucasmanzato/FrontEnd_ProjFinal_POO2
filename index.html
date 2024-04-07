@@ -3,30 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Cliente e Quarto</title>
+    <title>Hotelaria</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js"></script>
     <script src="getRooms.js"></script>
 </head>
-<body>
+<body class="index">
     <header>
-        <img src="img/logoSemFundo.png" alt="Descrição da imagem" class="homePhoto">
-            <nav>
-                <ul>
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="#">Quartos</a></li>
-                    <li><a href="#">Clientes</a></li>
-                    <li><a href="#">Reservas</a></li>
-                </ul>
-            </nav>
-        </header>
+    <img src="img/logoSemFundo.png" alt="Descrição da imagem" class="homePhoto"> 
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="regQuarto.html">Quartos</a></li>
+                <li><a href="CadCliente.html">Clientes</a></li>
+                <li><a href="reservas.html">Reservas</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <main>
-            <h1>teste</h1>
-        </main>
+    <main >
+        <div class="home">
+            <h1>Gerenciar Quartos</h1>
+            
+            <button id="add-client-btn"><a href="CadCliente.html">Cadastrar Cliente</a></button>
+            <button id="add-room-btn"><a href="regQuarto.html">Gerenciar Quartos</a></button>
+            <button id="assign-room-btn"><a href="quartoCliente.html">Relacionar Cliente Quarto</a></button>
 
-        <footer>
-            <p>&copy; 2024 Hotelaria. Todos os direitos reservados.</p>
-        </footer>
+        </div>
+        
+    </main>
+    <footer>
+        <p>&copy; 2024 Hotelaria. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html>
