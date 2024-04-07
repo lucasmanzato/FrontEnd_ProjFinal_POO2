@@ -1,40 +1,47 @@
-const form = document.querySelector('#registerRoom');
+document.getElementById('bookingForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
+    
+    // Obtenha os valores dos campos do formulário
+    var clientName = document.getElementById('clientName').value;
+    var clientCPF = document.getElementById('clientCPF').value;
+    var inDate = document.getElementById('inDate').value;
+    var outDate = document.getElementById('outDate').value;
+    var numberRoom = document.getElementById('numberRoom').value;
+    var roomType = document.getElementById('roomType').value;
+    var cafeDaManha = document.getElementById('cafeDaManha').checked;
 
-const numQuartoInput = document.getElementById('numQuarto');
-const cpfInput = document.getElementById('cpf');
-const dataEntradaInput = document.getElementById('dataEntrada');
-const dataSaidaInput = document.getElementById('dataSaida');
-const submitButton = document.querySelector('input[type="submit"]');
-const removerButton = document.querySelector('input[type="button"]');
+    // Crie um objeto JSON com os valores
+    var data = {
+        clientName: clientName,
+        clientCPF: clientCPF,
+        inDate: inDate,
+        outDate: outDate,
+        numberRoom: numberRoom,
+        roomType: roomType,
+        cafeDaManha: cafeDaManha
+    };
 
+    // Converta o objeto JSON em uma string
+    var jsonData = JSON.stringify(data);
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    // Defina a URL para enviar os dados
+    var url = 'http://localhost:8080/rooms';
 
-    const data = JSON.stringify({
-        numQuarto: numQuartoInput.value,
-        cpf: cpfInput.value,
-        dataEntrada: dataEntradaInput.value,
-        dataSaida: dataSaidaInput.value
-    })
-
-    console.log(data)
-
-    const url = 'http://localhost:8080/rooms'; 
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: data
-        });
-
-        if (response.ok) {
-            console.log('Dados enviados com sucesso!');
-            // Faça algo com a resposta da API, se necessário
-        } else {
-            console.error('Erro ao enviar os dados:', response.status);
+    // Faça uma solicitação POST usando Fetch API
+    fetch(url, {
+        method: 'POST',
+        body: jsonData,
+        headers:{
+            'Content-Type': 'application/json'
         }
-    } catch (error) {
-        console.error('Erro na requisição:', error);
-    }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Sucesso:', data);
+        // Faça algo com a resposta, se necessário
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        // Trate o erro, se necessário
+    });
 });

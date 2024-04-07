@@ -22,22 +22,35 @@
         </header>
 
         <main>
-            <form id = 'registerRoom'>
-                <label for="numQuarto">Número do Quarto</label>
-                <input type="text" id="numQuarto" name="numQuarto"><br><br>
+            <form id="bookingForm">
+                <label for="clientName">Nome do Cliente:</label>
+                <input type="text" id="clientName" name="clientName" required><br><br>
                 
-                <label for="cpf">CPF:</label>
-                <input type="text" id="cpf" name="cpf"><br><br>
-    
-                <label for="dataEntrada">Data de Entrada:</label>
-                <input type="date" id="dataEntrada" name="dataEntrada"><br><br>
-
-                <label for="dataSaida">Data de saída:</label>
-                <input type="date" id="dataSaida" name="dataSaida"><br><br>
-                
-                <input type="submit" class="inputButton">
-                <input type="button" value="Remover" class="inputButton">
+                <label for="clientCPF">CPF do Cliente:</label>
+                <input type="text" id="clientCPF" name="clientCPF" required><br><br>
+            
+                <label for="inDate">Data de Entrada:</label>
+                <input type="date" id="inDate" name="inDate" required><br><br>
+            
+                <label for="outDate">Data de Saída:</label>
+                <input type="date" id="outDate" name="outDate" required><br><br>
+            
+                <label for="numberRoom">Número do Quarto:</label>
+                <input type="number" id="numberRoom" name="numberRoom" required><br><br>
+            
+                <label for="roomType">Tipo de Quarto:</label>
+                <select id="roomType" name="roomType" required>
+                    <option value="standard">Standard</option>
+                    <option value="deluxe">Deluxe</option>
+                    <option value="presidential">Presidencial</option>
+                </select><br><br>
+            
+                <label for="cafeDaManha">Café da Manhã:</label>
+                <input type="checkbox" id="cafeDaManha" name="cafeDaManha"><br><br>
+            
+                <input type="submit" value="Enviar">
             </form>
+            
         </main>
 
         <footer>
