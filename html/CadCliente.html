@@ -21,15 +21,18 @@
         </nav>
     </header>
     <main>
-        <form id = registerClient>
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome"><br><br>
-            
-            <label for="cpf">CPF:</label>
-            <input type="text" id="cpf" name="cpf"><br><br>
-            
-            <input type="button" value="Submit" class="inputButton">
-        </form>
+        <form id="registerClient">
+            <label for="clientName">Nome do Cliente:</label><br>
+            <input type="text" id="clientName" name="clientName" required><br><br>
+          
+            <label for="clientCPF">CPF do Cliente:</label><br>
+            <input type="text" id="clientCPF" name="clientCPF" required><br><br>
+          
+            <label for="clientBDay">Data de Nascimento do Cliente:</label><br>
+            <input type="date" id="clientBDay" name="clientBDay" required><br><br>
+          
+            <button type="submit">Enviar Reserva</button>
+          </form>
     </main>
     <footer>
         <p>&copy; 2024 Hotelaria. Todos os direitos reservados.</p>
