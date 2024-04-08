@@ -1,48 +1,79 @@
 const url = "http://localhost:8080/clients";
 
-function inserirClientes(jsonData) {
-    var divPai = document.getElementById('clientsContainer'); // Obtém a div pai
+// Função para criar um elemento de texto
+function createTextElement(text) {
+    const element = document.createElement('p');
+    element.textContent = text;
+    return element;
+}
 
-    // Verifica se a div pai existe
-    if (divPai) {
-        // Itera sobre os dados do JSON
-        jsonData.forEach(function(cliente) {
-            // Cria uma nova div para cada cliente
-            var divCliente = document.createElement('div');
-            divCliente.classList.add('cliente'); // Adiciona uma classe à div do cliente
+// Função para criar um botão de exclusão
+function createDeleteButton(id) {
+    const button = document.createElement('button');
+    button.textContent = 'Excluir';
+    button.addEventListener('click', function() {
+        deleteClient(id);
+    });
+    return button;
+}
 
-            // Cria e preenche os elementos de texto com as informações do cliente
-            var textoCliente = document.createElement('p');
-            textoCliente.textContent = `Cliente: ${cliente.clientName}, CPF: ${cliente.clientCPF}, Ano de Nascimento: ${cliente.clientBDay}`;
+// Função para criar a estrutura HTML de um cliente
+function createClientElement(client) {
+    const clientElement = document.createElement('div');
+    clientElement.classList.add('cliente');
+    
+    const clientInfo = `Cliente: ${client.clientName}, CPF: ${client.clientCPF}, Ano de Nascimento: ${client.clientBDay}`;
+    clientElement.appendChild(createTextElement(clientInfo));
+    
+    const deleteButton = createDeleteButton(client.idClient);
+    clientElement.appendChild(deleteButton);
+    
+    return clientElement;
+}
 
-            // Adiciona o texto do cliente à div do cliente
-            divCliente.appendChild(textoCliente);
-
-            // Adiciona a div do cliente à div pai
-            divPai.appendChild(divCliente);
+// Função para inserir os clientes na interface HTML
+function insertClients(clients) {
+    const clientsContainer = document.getElementById('clientsContainer');
+    if (clientsContainer) {
+        clientsContainer.innerHTML = ''; // Limpa o conteúdo antes de inserir os novos clientes
+        clients.forEach(client => {
+            const clientElement = createClientElement(client);
+            clientsContainer.appendChild(clientElement);
         });
     } else {
         console.error('A div pai com o ID especificado não foi encontrada.');
     }
 }
 
-async function getAllRooms() {
-  try {
-    const response = await fetch(url, {method: 'GET'});
-
-    if (!response.ok) {
-      throw new Error(`Erro na requisição: ${response.status}`);
+// Função para buscar todos os clientes da API
+async function getAllClients() {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        const clientsData = await response.json();
+        console.log(clientsData);
+        insertClients(clientsData);
+    } catch (error) {
+        console.error("Erro na requisição:", error.message);
     }
-
-    const data = await response.json(); 
-
-    console.log("Dados da API:", data);
-
-    inserirClientes(data);
-
-  } catch (error) {
-    console.error("Erro na requisição:", error.message);
-  }
 }
 
-getAllRooms();
+// Função para excluir um cliente
+async function deleteClient(id) {
+    const deleteUrl = `${url}/${id}`;
+    try {
+        const response = await fetch(deleteUrl, { method: 'DELETE' });
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        console.log(`Cliente com ID ${id} excluído com sucesso.`);
+        getAllClients(); // Recarrega a lista de clientes após a exclusão
+    } catch (error) {
+        console.error("Erro na requisição:", error.message);
+    }
+}
+
+// Chama a função para buscar todos os clientes ao carregar a página
+getAllClients();
