@@ -17,6 +17,16 @@ function createDeleteButton(id) {
     return button;
 }
 
+// Função para criar um botão de editar
+function createEditButton(room) {
+    const button = document.createElement('button');
+    button.textContent = 'Editar';
+    button.addEventListener('click', function() {
+        openEditModal(room);
+    });
+    return button;
+}
+
 // Função para criar a estrutura HTML de uma reserva
 function createRoomElement(room) {
     const roomElement = document.createElement('div');
@@ -26,7 +36,9 @@ function createRoomElement(room) {
     roomElement.appendChild(createTextElement(roomInfo));
     
     const deleteButton = createDeleteButton(room.idRoom);
+    const editButton = createEditButton(room);
     roomElement.appendChild(deleteButton);
+    roomElement.appendChild(editButton);
     
     return roomElement;
 }
@@ -73,6 +85,66 @@ async function deleteRoom(id) {
         console.error("Erro na requisição:", error.message);
     }
 }
+
+// Função para abrir o modal de edição
+// Função para abrir o modal de edição
+function openEditModal(room) {
+  const modal = document.getElementById('modal');
+  const modalContent = document.querySelector('.modal-content');
+  const closeModalButton = document.querySelector('.close');
+  
+  // Preencher os campos do formulário com os dados da reserva
+  document.getElementById('clientName').value = room.clientName;
+  document.getElementById('clientCPF').value = room.clientCPF;
+  document.getElementById('inDate').value = room.inDate;
+  document.getElementById('outDate').value = room.outDate;
+  document.getElementById('numberRoom').value = room.numberRoom;
+  document.getElementById('roomType').value = room.roomType;
+  document.getElementById('cafeDaManha').checked = room.cafeDaManha;
+  
+  // Exibir o modal
+  modal.style.display = 'block';
+  
+  // Fechar o modal ao clicar no botão de fechar ou fora do modal
+  closeModalButton.onclick = function() {
+      modal.style.display = 'none';
+  }
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = 'none';
+      }
+  }
+  
+  // Lidar com o envio do formulário
+  const bookingForm = document.getElementById('bookingForm');
+  bookingForm.onsubmit = function(event) {
+      event.preventDefault();
+      const editedBookingData = {
+          clientName: document.getElementById('clientName').value,
+          clientCPF: document.getElementById('clientCPF').value,
+          inDate: document.getElementById('inDate').value,
+          outDate: document.getElementById('outDate').value,
+          numberRoom: document.getElementById('numberRoom').value,
+          roomType: document.getElementById('roomType').value,
+          cafeDaManha: document.getElementById('cafeDaManha').checked
+      };
+      // Aqui você pode enviar os dados editados como JSON para o servidor
+      // e depois recarregar as reservas na página
+      console.log('Dados do formulário enviado:', editedBookingData);
+      modal.style.display = 'none'; // Fechar o modal após enviar os dados
+  }
+}
+
+// Função auxiliar para serializar os dados do formulário em um objeto JSON
+function serializeFormData(form) {
+  const formData = new FormData(form);
+  const jsonData = {};
+  formData.forEach((value, key) => {
+      jsonData[key] = value;
+  });
+  return jsonData;
+}
+
 
 // Chama a função para buscar todas as reservas ao carregar a página
 getAllRooms();

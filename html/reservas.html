@@ -6,6 +6,7 @@
     <title>Ver Reservars</title>
     <link rel="stylesheet" href="/styles.css">
     <script src="/js/getRooms.js" defer></script>
+    <link rel="stylesheet" href="/css/modalReservas.css">
 </head>
 <body>
     <header>
@@ -25,6 +26,43 @@
             <div id="roomsContainer">
 
             </div>
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Editar Reserva</h2>
+    <form id="bookingForm">
+        <label for="clientName">Nome do Cliente:</label>
+        <input type="text" id="clientName" name="clientName" required><br><br>
+        
+        <label for="clientCPF">CPF do Cliente:</label>
+        <input type="text" id="clientCPF" name="clientCPF" required><br><br>
+    
+        <label for="inDate">Data de Entrada:</label>
+        <input type="date" id="inDate" name="inDate" required><br><br>
+    
+        <label for="outDate">Data de Saída:</label>
+        <input type="date" id="outDate" name="outDate" required><br><br>
+    
+        <label for="numberRoom">Número do Quarto:</label>
+        <input type="number" id="numberRoom" name="numberRoom" required><br><br>
+    
+        <label for="roomType">Tipo de Quarto:</label>
+        <select id="roomType" name="roomType" required>
+            <option value="standard">Standard</option>
+            <option value="deluxe">Deluxe</option>
+            <option value="presidential">Presidencial</option>
+        </select><br><br>
+    
+        <label for="cafeDaManha">Café da Manhã:</label>
+        <input type="checkbox" id="cafeDaManha" name="cafeDaManha"><br><br>
+    
+        <input type="submit" value="Salvar">
+    </form>
+  </div>
+</div>
+
+
         </main>
 
         <footer>

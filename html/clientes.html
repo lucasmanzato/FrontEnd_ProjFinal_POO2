@@ -6,6 +6,7 @@
     <title>Ver Clientes</title>
     <link rel="stylesheet" href="/styles.css">
     <script src="/js/getClients.js" defer></script>
+    <link rel="stylesheet" href="/css/modalClientes.css">
 </head>
 <body>
     <header>
@@ -25,6 +26,27 @@
             <div id="clientsContainer">
                     
             </div>
+
+
+
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <h2>Editar Cliente</h2>
+                  <form id="editForm">
+                      <label for="clientName">Nome do Cliente:</label>
+                      <input type="text" id="clientName" name="clientName" required><br><br>
+                      
+                      <label for="clientCPF">CPF do Cliente:</label>
+                      <input type="text" id="clientCPF" name="clientCPF" required><br><br>
+                  
+                      <label for="clientBDay">Ano de Nascimento:</label>
+                      <input type="date" id="clientBDay" name="clientBDay" required><br><br>
+                  
+                      <input type="submit" value="Salvar">
+                  </form>
+                </div>
+              </div>
         </main>
 
         <footer>

@@ -17,6 +17,16 @@ function createDeleteButton(id) {
     return button;
 }
 
+// Função para criar um botão de edição
+function createEditButton(client) {
+    const button = document.createElement('button');
+    button.textContent = 'Editar';
+    button.addEventListener('click', function() {
+        openEditModal(client);
+    });
+    return button;
+}
+
 // Função para criar a estrutura HTML de um cliente
 function createClientElement(client) {
     const clientElement = document.createElement('div');
@@ -26,7 +36,9 @@ function createClientElement(client) {
     clientElement.appendChild(createTextElement(clientInfo));
     
     const deleteButton = createDeleteButton(client.idClient);
+    const editButton = createEditButton(client); // Adicione o botão de editar
     clientElement.appendChild(deleteButton);
+    clientElement.appendChild(editButton); // Adicione o botão de editar
     
     return clientElement;
 }
@@ -53,7 +65,6 @@ async function getAllClients() {
             throw new Error(`Erro na requisição: ${response.status}`);
         }
         const clientsData = await response.json();
-        console.log(clientsData);
         insertClients(clientsData);
     } catch (error) {
         console.error("Erro na requisição:", error.message);
@@ -68,11 +79,60 @@ async function deleteClient(id) {
         if (!response.ok) {
             throw new Error(`Erro na requisição: ${response.status}`);
         }
-        console.log(`Cliente com ID ${id} excluído com sucesso.`);
         getAllClients(); // Recarrega a lista de clientes após a exclusão
     } catch (error) {
         console.error("Erro na requisição:", error.message);
     }
+}
+
+// Função para abrir o modal de edição
+function openEditModal(client) {
+    const modal = document.getElementById('modal');
+    const modalContent = document.querySelector('.modal-content');
+    const closeModalButton = document.querySelector('.close');
+    
+    // Preencher os campos do formulário com os dados do cliente
+    document.getElementById('clientName').value = client.clientName;
+    document.getElementById('clientCPF').value = client.clientCPF;
+    document.getElementById('clientBDay').value = client.clientBDay;
+    
+    // Exibir o modal
+    modal.style.display = 'block';
+    
+    // Fechar o modal ao clicar no botão de fechar ou fora do modal
+    closeModalButton.onclick = function() {
+        modal.style.display = 'none';
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+    
+    // Lidar com o envio do formulário
+    const editForm = document.getElementById('editForm');
+    editForm.onsubmit = function(event) {
+        event.preventDefault();
+        const editedClientData = {
+            clientName: document.getElementById('clientName').value,
+            clientCPF: document.getElementById('clientCPF').value,
+            clientBDay: document.getElementById('clientBDay').value
+        };
+        // Aqui você pode enviar os dados editados como JSON para o servidor
+        // e depois recarregar os clientes na página
+        console.log('Dados do formulário enviado:', editedClientData);
+        modal.style.display = 'none'; // Fechar o modal após enviar os dados
+    }
+}
+
+// Função auxiliar para serializar os dados do formulário em um objeto JSON
+function serializeFormData(form) {
+    const formData = new FormData(form);
+    const jsonData = {};
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
+    return jsonData;
 }
 
 // Chama a função para buscar todos os clientes ao carregar a página
