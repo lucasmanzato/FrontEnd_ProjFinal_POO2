@@ -24,6 +24,7 @@ document.getElementById('bookingForm').addEventListener('submit', function(event
     // Defina a URL para enviar os dados
     var url = 'http://localhost:8080/rooms';
 
+    console.log(JSON.stringify(data));
     // Faça uma solicitação POST usando Fetch API
     fetch(url, {
         method: 'POST',
