@@ -27,6 +27,34 @@ function createEditButton(client) {
     return button;
 }
 
+function openEditModal(client) {
+    // Preencher os campos do formulário com os dados do cliente
+    document.getElementById('clientName').value = client.clientName;
+    document.getElementById('clientCPF').value = client.clientCPF;
+    document.getElementById('clientBDay').value = client.clientBDay;
+
+    // Bloquear a edição do campo CPF
+    document.getElementById('clientCPF').readOnly = true;
+
+    // Exibir o modal
+    const modal = document.getElementById('modal');
+    modal.style.display = 'block';
+
+    // Adicionar evento para fechar o modal ao clicar no botão de fechar
+    const closeButton = document.getElementsByClassName('close')[0];
+    closeButton.onclick = function() {
+        modal.style.display = 'none';
+    };
+
+    // Adicionar evento para fechar o modal ao clicar fora dele
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+}
+
+
 // Função para criar a estrutura HTML de um cliente
 function createClientElement(client) {
     const clientElement = document.createElement('div');
@@ -65,6 +93,12 @@ async function getAllClients() {
             throw new Error(`Erro na requisição: ${response.status}`);
         }
         const clientsData = await response.json();
+        console.log(clientsData);
+
+        for (const client of clientsData){
+            clientsId[client.clientCPF] = client.idClient
+        }
+
         insertClients(clientsData);
     } catch (error) {
         console.error("Erro na requisição:", error.message);
@@ -92,13 +126,19 @@ editForm.onsubmit = function(event) {
     const editedClientData = {
         clientName: document.getElementById('clientName').value,
         clientCPF: document.getElementById('clientCPF').value,
-        clientBDay: document.getElementById('clientBDay').value
+        clientBDay: parseInt(document.getElementById('clientBDay').value.split('-')[0])
     };
 
     // Aqui você precisa substituir {id} com o ID real do cliente
-    const clientId = "ID_DO_CLIENTE_AQUI";
+    const clientId = clientsId[editedClientData.clientCPF];
 
-    fetch(`/clients/${clientId}`, {
+    console.log("Elemento 'clientCPF' encontrado:", document.getElementById('clientCPF'));
+    console.log("Valor do campo 'clientCPF':", document.getElementById('clientCPF').value);
+    console.log("ID do cliente:", clientId);
+    console.log("Enviando dados editados do cliente:", JSON.stringify(editedClientData));
+    
+
+    fetch(`http://localhost:8080/clients/${clientId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -116,6 +156,7 @@ editForm.onsubmit = function(event) {
         // Aqui você pode atualizar os detalhes do cliente na interface do usuário
         // Exemplo: document.getElementById('clientDetails').innerText = JSON.stringify(data);
         modal.style.display = 'none'; // Fechar o modal após enviar os dados
+        getAllClients();
     })
     .catch(error => {
         console.error('Erro:', error);
@@ -135,3 +176,4 @@ function serializeFormData(form) {
 
 // Chama a função para buscar todos os clientes ao carregar a página
 getAllClients();
+var clientsId = {};

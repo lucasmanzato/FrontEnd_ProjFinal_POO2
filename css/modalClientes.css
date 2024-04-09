@@ -35,3 +35,7 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  #clientCPF {
+    background-color: #d3d3d3; /* Define a cor de fundo para cinza claro */
+}

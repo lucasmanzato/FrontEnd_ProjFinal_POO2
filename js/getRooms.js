@@ -1,4 +1,5 @@
 const url = "http://localhost:8080/rooms";
+var roomsId = {}; // Variável para armazenar os IDs dos quartos
 
 // Função para criar um elemento de texto
 function createTextElement(text) {
@@ -65,6 +66,11 @@ async function getAllRooms() {
             throw new Error(`Erro na requisição: ${response.status}`);
         }
         const roomsData = await response.json();
+
+        for (const room of roomsData){
+            roomsId[room.numberRoom] = room.idRoom;
+        }
+
         insertRooms(roomsData);
     } catch (error) {
         console.error("Erro na requisição:", error.message);
@@ -87,64 +93,86 @@ async function deleteRoom(id) {
 }
 
 // Função para abrir o modal de edição
-// Função para abrir o modal de edição
 function openEditModal(room) {
-  const modal = document.getElementById('modal');
-  const modalContent = document.querySelector('.modal-content');
-  const closeModalButton = document.querySelector('.close');
-  
-  // Preencher os campos do formulário com os dados da reserva
-  document.getElementById('clientName').value = room.clientName;
-  document.getElementById('clientCPF').value = room.clientCPF;
-  document.getElementById('inDate').value = room.inDate;
-  document.getElementById('outDate').value = room.outDate;
-  document.getElementById('numberRoom').value = room.numberRoom;
-  document.getElementById('roomType').value = room.roomType;
-  document.getElementById('cafeDaManha').checked = room.cafeDaManha;
-  
-  // Exibir o modal
-  modal.style.display = 'block';
-  
-  // Fechar o modal ao clicar no botão de fechar ou fora do modal
-  closeModalButton.onclick = function() {
-      modal.style.display = 'none';
-  }
-  window.onclick = function(event) {
-      if (event.target == modal) {
-          modal.style.display = 'none';
-      }
-  }
-  
-  // Lidar com o envio do formulário
-  const bookingForm = document.getElementById('bookingForm');
-  bookingForm.onsubmit = function(event) {
-      event.preventDefault();
-      const editedBookingData = {
-          clientName: document.getElementById('clientName').value,
-          clientCPF: document.getElementById('clientCPF').value,
-          inDate: document.getElementById('inDate').value,
-          outDate: document.getElementById('outDate').value,
-          numberRoom: document.getElementById('numberRoom').value,
-          roomType: document.getElementById('roomType').value,
-          cafeDaManha: document.getElementById('cafeDaManha').checked
-      };
-      // Aqui você pode enviar os dados editados como JSON para o servidor
-      // e depois recarregar as reservas na página
-      console.log('Dados do formulário enviado:', editedBookingData);
-      modal.style.display = 'none'; // Fechar o modal após enviar os dados
-  }
+    const modal = document.getElementById('modal');
+    const closeModalButton = document.querySelector('.close');
+    
+    // Preencher os campos do formulário com os dados da reserva
+    document.getElementById('clientName').value = room.clientName;
+    document.getElementById('clientCPF').value = room.clientCPF;
+    document.getElementById('inDate').value = room.inDate;
+    document.getElementById('outDate').value = room.outDate;
+    document.getElementById('numberRoom').value = room.numberRoom;
+    document.getElementById('roomType').value = room.roomType;
+    document.getElementById('cafeDaManha').checked = room.cafeDaManha;
+    
+    // Exibir o modal
+    modal.style.display = 'block';
+    
+    // Fechar o modal ao clicar no botão de fechar ou fora do modal
+    closeModalButton.onclick = function() {
+        modal.style.display = 'none';
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+    
+    // Lidar com o envio do formulário
+    const bookingForm = document.getElementById('bookingForm');
+    bookingForm.onsubmit = async function(event) {
+        event.preventDefault();
+        const editedBookingData = {
+            clientName: document.getElementById('clientName').value,
+            clientCPF: document.getElementById('clientCPF').value,
+            inDate: document.getElementById('inDate').value,
+            outDate: document.getElementById('outDate').value,
+            numberRoom: document.getElementById('numberRoom').value,
+            roomType: document.getElementById('roomType').value,
+            cafeDaManha: document.getElementById('cafeDaManha').checked
+        };
+        
+        try {
+            // Obter o ID real da reserva do objeto room
+
+            const bookingId = room.idRoom;
+            const response = await fetch(`${url}/${bookingId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(editedBookingData)
+            });
+
+    
+            if (!response.ok) {
+                throw new Error('Erro ao enviar os dados.');
+            }
+    
+            const data = await response.json();
+            console.log('Resposta do servidor:', data);
+    
+            // Fechar o modal após enviar os dados
+            modal.style.display = 'none';
+            
+            // Recarregar as reservas na página
+            getAllRooms();
+        } catch (error) {
+            console.error('Erro:', error);
+        }
+    };
 }
 
 // Função auxiliar para serializar os dados do formulário em um objeto JSON
 function serializeFormData(form) {
-  const formData = new FormData(form);
-  const jsonData = {};
-  formData.forEach((value, key) => {
-      jsonData[key] = value;
-  });
-  return jsonData;
+    const formData = new FormData(form);
+    const jsonData = {};
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
+    return jsonData;
 }
-
 
 // Chama a função para buscar todas as reservas ao carregar a página
 getAllRooms();
