@@ -86,44 +86,42 @@ async function deleteClient(id) {
 }
 
 // Função para abrir o modal de edição
-function openEditModal(client) {
-    const modal = document.getElementById('modal');
-    const modalContent = document.querySelector('.modal-content');
-    const closeModalButton = document.querySelector('.close');
-    
-    // Preencher os campos do formulário com os dados do cliente
-    document.getElementById('clientName').value = client.clientName;
-    document.getElementById('clientCPF').value = client.clientCPF;
-    document.getElementById('clientBDay').value = client.clientBDay;
-    
-    // Exibir o modal
-    modal.style.display = 'block';
-    
-    // Fechar o modal ao clicar no botão de fechar ou fora do modal
-    closeModalButton.onclick = function() {
-        modal.style.display = 'none';
-    }
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
+const editForm = document.getElementById('editForm');
+editForm.onsubmit = function(event) {
+    event.preventDefault();
+    const editedClientData = {
+        clientName: document.getElementById('clientName').value,
+        clientCPF: document.getElementById('clientCPF').value,
+        clientBDay: document.getElementById('clientBDay').value
+    };
+
+    // Aqui você precisa substituir {id} com o ID real do cliente
+    const clientId = "ID_DO_CLIENTE_AQUI";
+
+    fetch(`/clients/${clientId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editedClientData),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao enviar os dados.');
         }
-    }
-    
-    // Lidar com o envio do formulário
-    const editForm = document.getElementById('editForm');
-    editForm.onsubmit = function(event) {
-        event.preventDefault();
-        const editedClientData = {
-            clientName: document.getElementById('clientName').value,
-            clientCPF: document.getElementById('clientCPF').value,
-            clientBDay: document.getElementById('clientBDay').value
-        };
-        // Aqui você pode enviar os dados editados como JSON para o servidor
-        // e depois recarregar os clientes na página
-        console.log('Dados do formulário enviado:', editedClientData);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Dados do servidor após edição:', data);
+        // Aqui você pode atualizar os detalhes do cliente na interface do usuário
+        // Exemplo: document.getElementById('clientDetails').innerText = JSON.stringify(data);
         modal.style.display = 'none'; // Fechar o modal após enviar os dados
-    }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+    });
 }
+
 
 // Função auxiliar para serializar os dados do formulário em um objeto JSON
 function serializeFormData(form) {
