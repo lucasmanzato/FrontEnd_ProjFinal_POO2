@@ -132,10 +132,21 @@ function openEditModal(room) {
             roomType: document.getElementById('roomType').value,
             cafeDaManha: document.getElementById('cafeDaManha').checked
         };
-    
+        
+
+        console.log(JSON.stringify(editedBookingData))
+
         try {
             const bookingId = editedBookingData.numberRoom; // Usar o número do quarto corretamente
-    
+            
+
+            const response1 = await fetch(`${url}/vacate/${bookingId}`, {
+                method: 'DELETE',
+            });
+
+            console.log(bookingId)
+            console.log(response1);
+
             const response = await fetch(`${url}/${bookingId}`, {
                 method: 'PUT',
                 headers: {
