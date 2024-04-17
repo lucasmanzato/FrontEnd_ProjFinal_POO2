@@ -128,15 +128,14 @@ function openEditModal(room) {
             clientCPF: document.getElementById('clientCPF').value,
             inDate: document.getElementById('inDate').value,
             outDate: document.getElementById('outDate').value,
-            numberRoom: document.getElementById('numberRoom').value,
+            numberRoom: parseInt(document.getElementById('numberRoom').value),
             roomType: document.getElementById('roomType').value,
             cafeDaManha: document.getElementById('cafeDaManha').checked
         };
-        
+    
         try {
-            // Obter o ID real da reserva do objeto room
-
-            const bookingId = room.idRoom;
+            const bookingId = editedBookingData.numberRoom; // Usar o número do quarto corretamente
+    
             const response = await fetch(`${url}/${bookingId}`, {
                 method: 'PUT',
                 headers: {
@@ -144,7 +143,6 @@ function openEditModal(room) {
                 },
                 body: JSON.stringify(editedBookingData)
             });
-
     
             if (!response.ok) {
                 throw new Error('Erro ao enviar os dados.');
@@ -162,6 +160,7 @@ function openEditModal(room) {
             console.error('Erro:', error);
         }
     };
+    
 }
 
 // Função auxiliar para serializar os dados do formulário em um objeto JSON
